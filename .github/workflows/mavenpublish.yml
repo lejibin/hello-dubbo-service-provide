@@ -18,14 +18,12 @@ jobs:
         env:
           MAVEN_USER_NAME: ${{ secrets.MAVEN_USER_NAME }}
           MAVEN_USER_PASSWORD: ${{ secrets.MAVEN_USER_PASSWORD }}
-          DOCKER_USER_NAME: ${{ secrets.DOCKER_USER_NAME }}
-          DOCKER_USER_PASSWORD: ${{ secrets.DOCKER_USER_PASSWORD }}
         run: |
           mv /usr/share/apache-maven-3.6.3/conf/settings.xml /usr/share/apache-maven-3.6.3/conf/settings.xml.bak
           cp maven-settings.xml /usr/share/apache-maven-3.6.3/conf/settings.xml
           mvn clean deploy -DskipTests
           cp target/hello-dubbo-service-provide-1.0.0-SNAPSHOT.jar docker/hello-dubbo-service-provide-1.0.0-SNAPSHOT.jar
           cd docker
-          docker build . --file Dockerfile --tag registry.cn-qingdao.aliyuncs.com/hello-dubbo/entity
+          docker build . --file Dockerfile --tag registry.cn-qingdao.aliyuncs.com/hello-dubbo/service-provide
           docker login --username=${{ secrets.DOCKER_USER_NAME }} --password=${{ secrets.DOCKER_USER_PASSWORD }} registry.cn-qingdao.aliyuncs.com
           docker push registry.cn-qingdao.aliyuncs.com/hello-dubbo/service-provide
